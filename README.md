@@ -15,9 +15,16 @@ We have a request handlers for each of the requests like CheckIn, CheckOut, Appl
 Example:
 
 **Alexa, ask my clueless to take me to zoho**
-
+   
 **Alexa, ask my clueless to mark my attendance**
 
+## Testing the clueless skill
+
+![img.png](img.png)
+
+### Results in Zoho
+![img_2.png](img_2.png)
+![img_3.png](img_3.png)
 
 ### AWS Lambda Setup
 Refer to [Hosting a Custom Skill as an AWS Lambda Function](https://developer.amazon.com/docs/custom-skills/host-a-custom-skill-as-an-aws-lambda-function.html) reference for a walkthrough on creating a AWS Lambda function with the correct role for your skill. When creating the function, select the “Author from scratch” option, and select the Java 8 runtime.
