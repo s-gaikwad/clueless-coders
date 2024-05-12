@@ -2,16 +2,10 @@ package com.clueless.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.squareup.okhttp.FormEncodingBuilder;
-import java.io.File;
-import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import okhttp3.FormBody;
 import okhttp3.MediaType;
@@ -19,23 +13,12 @@ import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.Request;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.hc.core5.http.io.entity.EntityUtils;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 
 
-@Service
-@Slf4j
 public class ZohoServiceImpl {
 
   ObjectMapper mapper = new ObjectMapper();
-
-  @Value("${app.zoho.client-id}")
-  private String ZOHO_CLIENT_ID;
-  @Value("${app.zoho.client-secret}")
-  private String ZOHO_CLIENT_SECRET;
+  SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
   @SneakyThrows
   public String generateAccessTokenUsingRefreshToken(){
@@ -59,28 +42,25 @@ public class ZohoServiceImpl {
   @SneakyThrows
   public String checkIn(){
 
-    OkHttpClient client = new OkHttpClient().newBuilder()
-        .build();
-    MediaType mediaType = MediaType.parse("text/plain");
-    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+    OkHttpClient client = new OkHttpClient().newBuilder().build();
+    String checkInTime = simpleDateFormat.format(new Date());
     val formBody = new FormBody.Builder()
         .add("dateFormat", "dd/MM/yyyy HH:mm:ss")
-        .add("checkIn",simpleDateFormat.format(new Date()))
-//        .add("checkOut", "09/05/2024 20:45:13")   // only checkout In
-        .add("empId","3")
+        .add("checkIn", checkInTime)
+        .add("empId","2")
         .build();
 
     Request request = new Request.Builder()
         .url("https://people.zoho.in/people/api/attendance")
         .method("POST", formBody)
-        .addHeader("Authorization", "Zoho-oauthtoken " + "1000.bd38d1e32556667525e58696119c8b36.25c797d0421ff57a372f625b20182d5a")
+        .addHeader("Authorization", "Zoho-oauthtoken " + "1000.4e9ac099fa196ff23d022e39217451bf.c55b956f8687a8b6f60261666fab07c4")
         .build();
     Response response = client.newCall(request).execute();
     System.out.println(response);
     if (response.code() != 200) {
       return "Unknown Error!!!!!";
     }
-    return "Check-In Successfully...";
+    return " Checked-In At %s".formatted(checkInTime);
 
   }
 
@@ -90,40 +70,38 @@ public class ZohoServiceImpl {
     OkHttpClient client = new OkHttpClient().newBuilder()
         .build();
     MediaType mediaType = MediaType.parse("text/plain");
-    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+    String checkOutTime = simpleDateFormat.format(new Date());
     val formBody = new FormBody.Builder()
         .add("dateFormat", "dd/MM/yyyy HH:mm:ss")
-//        .add("checkIn",simpleDateFormat.format(new Date()))  // only checkout Out
-        .add("checkOut", simpleDateFormat.format(new Date()))
-        .add("empId","3")
+        .add("checkOut", checkOutTime)
+        .add("empId","2")
         .build();
 
     Request request = new Request.Builder()
         .url("https://people.zoho.in/people/api/attendance")
         .method("POST", formBody)
-        .addHeader("Authorization", "Zoho-oauthtoken " + "1000.0fcf06722b38c00af173c174bfee0a45.dbb6d4b489ec401674d068b648bdfc9f")
+        .addHeader("Authorization", "Zoho-oauthtoken " + "1000.4e9ac099fa196ff23d022e39217451bf.c55b956f8687a8b6f60261666fab07c4")
         .build();
     Response response = client.newCall(request).execute();
     System.out.println(response);
     if (response.code() != 200) {
       return "Unknown Error!!!!!";
     }
-    return "Check-Out Successfully...";
+    return " Check-Out %s".formatted(checkOutTime);
   }
 
-  @SuppressWarnings("deprecation")
   @SneakyThrows
   public String applyLeaveForEmployee() {
     OkHttpClient client = new OkHttpClient().newBuilder()
         .build();
     MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
     RequestBody body = RequestBody.create(mediaType,
-        "inputData={'Employee_ID':'161069000000256392','Leavetype':'161069000000254058','From':05-May-2024,'To':05-May-2024,'days':{'05-May-2024':{'LeaveCount':1, 'Session':2}}}");
+        "inputData={'Employee_ID':'161069000000256392','Leavetype':'161069000000254058','From':07-May-2024,'To':07-May-2024,'days':{'07-May-2024':{'LeaveCount':0.5, 'Session':2}}}");
     Request request = new Request.Builder()
         .url("https://people.zoho.in/people/api/forms/json/leave/insertRecord?inputData=")
         .method("POST", body)
         .addHeader("Authorization",
-            "Zoho-oauthtoken 1000.3a07713b64baacf91e928a8d20a84026.18a0e4c664efa09234d1f15aeba3fa3b")
+            "Zoho-oauthtoken 1000.4e9ac099fa196ff23d022e39217451bf.c55b956f8687a8b6f60261666fab07c4")
         .addHeader("Content-Type", "application/x-www-form-urlencoded")
         .addHeader("Cookie",
             "1b7c7929a1=55f6120f27055335daa474ce1d568d26; CSRF_TOKEN=c00548a8-4b3b-40b6-be64-85d87b562308; _zcsr_tmp=c00548a8-4b3b-40b6-be64-85d87b562308; _zpsid=5D2791167C6C8005DE57197248157D9F")
@@ -132,19 +110,19 @@ public class ZohoServiceImpl {
     if (response.code() != 200) {
       return "Unknown Error!!!!!";
     }
-    return "Leave Applied Successfully...";
+    return " Leave Applied Successfully.";
 
   }
 
   public static void main(String[] args) {
     ZohoServiceImpl zohoService = new ZohoServiceImpl();
-    String accessToken = zohoService.generateAccessTokenUsingRefreshToken();
-    System.out.println(accessToken);
+//    String accessToken = zohoService.generateAccessTokenUsingRefreshToken();
+//    System.out.println(accessToken);
 
-
-//    zohoService.checkIn();
+//
+    zohoService.checkIn();
 //    zohoService.checkOut();
-//    zohoService.applyLeaveForEmployee();
-
+////    zohoService.applyLeaveForEmployee();
+//
   }
 }

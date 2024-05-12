@@ -1,0 +1,36 @@
+{
+  "languageModel": {
+    "intents": [
+      {
+        "name": "AMAZON.CancelIntent",
+        "samples": []
+      },
+      {
+        "name": "AMAZON.HelpIntent",
+        "samples": []
+      },
+      {
+        "name": "AMAZON.StopIntent",
+        "samples": []
+      },
+      {
+        "name": "HelloWorldIntent",
+        "samples": [
+          "say namaste",
+          "say namaste ji",
+          "hello ji",
+          "say namaskar",
+          "say namaskara",
+          "hey macha",
+          "how are you"
+        ],
+        "slots": []
+      },
+      {
+        "name": "AMAZON.FallbackIntent",
+        "samples": []
+      }
+    ],
+    "invocationName": "hey wake up"
+  }
+}

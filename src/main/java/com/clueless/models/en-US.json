@@ -1,0 +1,64 @@
+{
+  "languageModel": {
+    "intents": [
+      {
+        "name": "AMAZON.CancelIntent",
+        "samples": ["cancel it"]
+      },
+      {
+        "name": "AMAZON.HelpIntent",
+        "samples": ["help me"]
+      },
+      {
+        "name": "AMAZON.StopIntent",
+        "samples": ["stop it", "pause"]
+      },
+      {
+        "name": "ZohoIntent",
+        "samples": [
+          "open zoho",
+          "i did nothing today",
+          "i was busy today"
+        ]
+      },
+      {
+        "name": "CheckInIntent",
+        "samples": [
+          "please log me in",
+          "check-in for the day",
+          "check-in for today",
+          "start my day",
+          "check-in",
+          "i am in"
+        ]
+      },
+      {
+        "name": "CheckOutIntent",
+        "samples": [
+          "please log me out",
+          "check-out for the day",
+          "check-out for today",
+          "end my day",
+          "check-out",
+          "i am leaving"
+        ]
+      },
+      {
+        "name": "leaveIntent",
+        "samples": [
+          "apply sick leave",
+          "apply leave for the day",
+          "apply leave",
+          "i will be on leave today",
+          "i am on leave",
+          "taking leave"
+        ]
+      },
+      {
+        "name": "AMAZON.FallbackIntent",
+        "samples": ["enemy ahead", "fallback now"]
+      }
+    ],
+    "invocationName": "hello world"
+  }
+}
