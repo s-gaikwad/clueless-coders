@@ -17,8 +17,13 @@ import okhttp3.Request;
 
 public class ZohoServiceImpl {
 
+  public static final String REFRESH_TOKEN = "1000.88f915916fb784716f5c56611048acc0.167cd075376bf86afd7a5542da325a87";
+
+  public static final String ACCESS_TOKEN ="1000.7bb9d3dd5bcfef8553e85094bf50be96.24eecee70306139706f5e2d19afa4b4d";
+
   ObjectMapper mapper = new ObjectMapper();
   SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
 
   @SneakyThrows
   public String generateAccessTokenUsingRefreshToken(){
@@ -29,7 +34,8 @@ public class ZohoServiceImpl {
     RequestBody body = RequestBody.create(mediaType, "");
     Request request = new Request.Builder()
         .url(
-            "https://accounts.zoho.in/oauth/v2/token?refresh_token=1000.88f915916fb784716f5c56611048acc0.167cd075376bf86afd7a5542da325a87&client_id=1000.RJ0QY075W0P82QHUNG79WWPK7D0EEA&client_secret=1d77118b4c5b06f2f9d0da06196a61e64985a6bc35&grant_type=refresh_token")
+            "https://accounts.zoho.in/oauth/v2/token?refresh_token=" + REFRESH_TOKEN
+                + "&client_id=1000.RJ0QY075W0P82QHUNG79WWPK7D0EEA&client_secret=1d77118b4c5b06f2f9d0da06196a61e64985a6bc35&grant_type=refresh_token")
         .method("POST", body)
         .build();
     Response response = client.newCall(request).execute();
@@ -53,7 +59,7 @@ public class ZohoServiceImpl {
     Request request = new Request.Builder()
         .url("https://people.zoho.in/people/api/attendance")
         .method("POST", formBody)
-        .addHeader("Authorization", "Zoho-oauthtoken " + "1000.4e9ac099fa196ff23d022e39217451bf.c55b956f8687a8b6f60261666fab07c4")
+        .addHeader("Authorization", "Zoho-oauthtoken " + ACCESS_TOKEN)
         .build();
     Response response = client.newCall(request).execute();
     System.out.println(response);
@@ -80,7 +86,7 @@ public class ZohoServiceImpl {
     Request request = new Request.Builder()
         .url("https://people.zoho.in/people/api/attendance")
         .method("POST", formBody)
-        .addHeader("Authorization", "Zoho-oauthtoken " + "1000.4e9ac099fa196ff23d022e39217451bf.c55b956f8687a8b6f60261666fab07c4")
+        .addHeader("Authorization", "Zoho-oauthtoken " + ACCESS_TOKEN)
         .build();
     Response response = client.newCall(request).execute();
     System.out.println(response);
@@ -101,7 +107,7 @@ public class ZohoServiceImpl {
         .url("https://people.zoho.in/people/api/forms/json/leave/insertRecord?inputData=")
         .method("POST", body)
         .addHeader("Authorization",
-            "Zoho-oauthtoken 1000.4e9ac099fa196ff23d022e39217451bf.c55b956f8687a8b6f60261666fab07c4")
+            "Zoho-oauthtoken " + ACCESS_TOKEN)
         .addHeader("Content-Type", "application/x-www-form-urlencoded")
         .addHeader("Cookie",
             "1b7c7929a1=55f6120f27055335daa474ce1d568d26; CSRF_TOKEN=c00548a8-4b3b-40b6-be64-85d87b562308; _zcsr_tmp=c00548a8-4b3b-40b6-be64-85d87b562308; _zpsid=5D2791167C6C8005DE57197248157D9F")
@@ -114,15 +120,15 @@ public class ZohoServiceImpl {
 
   }
 
-  public static void main(String[] args) {
-    ZohoServiceImpl zohoService = new ZohoServiceImpl();
+//  public static void main(String[] args) {
+//    ZohoServiceImpl zohoService = new ZohoServiceImpl();
 //    String accessToken = zohoService.generateAccessTokenUsingRefreshToken();
 //    System.out.println(accessToken);
 
-//
-    zohoService.checkIn();
+
+//    zohoService.checkIn();
 //    zohoService.checkOut();
 ////    zohoService.applyLeaveForEmployee();
 //
-  }
+//  }
 }
