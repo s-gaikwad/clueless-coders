@@ -19,10 +19,10 @@ public class CheckInIntentHandler implements RequestHandler {
   public Optional<Response> handle(HandlerInput handlerInput) {
     ZohoServiceImpl zohoService = new ZohoServiceImpl();
     String checkInResponse = zohoService.checkIn();
-    String speechText = "Hey you have been checked in for the day!" + checkInResponse;
+    String speechText = "You have been checked in for the day." + checkInResponse;
     return handlerInput.getResponseBuilder()
         .withSpeech(speechText)
-        .withSimpleCard("HelloWorld", speechText)
+        .withSimpleCard("CheckIn", speechText)
         .build();
   }
 }

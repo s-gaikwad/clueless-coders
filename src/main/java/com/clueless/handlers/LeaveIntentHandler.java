@@ -19,10 +19,10 @@ public class LeaveIntentHandler implements RequestHandler {
   public Optional<Response> handle(HandlerInput handlerInput) {
     ZohoServiceImpl zohoService = new ZohoServiceImpl();
     String applyLeaveResponse = zohoService.applyLeaveForEmployee();
-    String speechText = "Your leave has been applied for the day!" + applyLeaveResponse;
+    String speechText = "Your leave has been applied for today!" + applyLeaveResponse;
     return handlerInput.getResponseBuilder()
         .withSpeech(speechText)
-        .withSimpleCard("HelloWorld", speechText)
+        .withSimpleCard("Leave", speechText)
         .build();
   }
 }

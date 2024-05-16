@@ -67,7 +67,7 @@ public class ZohoServiceImpl {
     if (response.code() != 200) {
       return "Unknown Error!";
     }
-    return " Checked-In At %s".formatted(checkInTime);
+    return " Checked-In at %s".formatted(checkInTime);
 
   }
 
@@ -95,7 +95,7 @@ public class ZohoServiceImpl {
     if (response.code() != 200) {
       return "Unknown Error!";
     }
-    return " Check-Out %s".formatted(checkOutTime);
+    return " Checked Out at %s".formatted(checkOutTime);
   }
 
   @SneakyThrows
@@ -121,7 +121,7 @@ public class ZohoServiceImpl {
     if (response.code() != 200) {
       return "Unknown Error!";
     }
-    return " Leave Applied Successfully for: %s".formatted(todayDate);
+    return todayDate;
 
   }
 
@@ -156,7 +156,7 @@ public class ZohoServiceImpl {
     if (response.code() != 200) {
       return "Unknown Error!";
     }
-    return " Leave Applied Successfully for: %s".formatted(tomorrowDate);
+    return tomorrowDate;
   }
 
   @SneakyThrows
@@ -168,7 +168,7 @@ public class ZohoServiceImpl {
     RequestBody body = RequestBody.create(mediaType, "");
     Request request = new Request.Builder()
         .url(
-            "https://people.zoho.in/people/api/timetracker/addtimelog?user=shashankgaikwad3093%40gmail.com&jobName=Testing20samples123&workDate=2024-05-16&billingStatus=Billable&hours=08&description="
+            "https://people.zoho.in/people/api/timetracker/addtimelog?user=shashankchhapanimohan%40gmail.com&jobName=Testing20samples123&workDate=2024-05-16&billingStatus=Billable&hours=08&description="
                 + description)
         .method("POST", body)
         .addHeader("Authorization", "Zoho-oauthtoken " + accessToken)

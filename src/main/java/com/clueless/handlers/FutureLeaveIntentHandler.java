@@ -19,7 +19,7 @@ public class FutureLeaveIntentHandler implements RequestHandler {
   public Optional<Response> handle(HandlerInput handlerInput) {
     ZohoServiceImpl zohoService = new ZohoServiceImpl();
     String applyLeaveResponse = zohoService.applyLeaveForEmployeeTomorrow();
-    String speechText = "Your leave has been applied for %s".formatted(applyLeaveResponse);
+    String speechText = "Your leave has been applied for tomorrow %s".formatted(applyLeaveResponse);
     return handlerInput.getResponseBuilder()
         .withSpeech(speechText)
         .withSimpleCard("Leave", speechText)

@@ -41,9 +41,10 @@ public class TimesheetIntentHandler implements RequestHandler {
     boolean noAnswerProvided = false;
 
     if (!StringUtils.isNullOrEmpty(taskValue) || !StringUtils.isNullOrEmpty(ticketValue)) {
-      speechText = String.format("Today I worked on %s for %s.", ticketValue, taskValue);
+      String ticketDescription = String.format("I worked on %s for %s.", ticketValue, taskValue);
       ZohoServiceImpl zohoService = new ZohoServiceImpl();
-      zohoService.addTimeLog(speechText);
+      zohoService.addTimeLog(ticketDescription);
+      speechText = "Timesheet recorded for the day.";
     } else {
       speechText = "Please describe proper summary.";
       noAnswerProvided = true;

@@ -30,7 +30,7 @@ public class ZohoIntentHandler implements RequestHandler {
 
     @Override
     public Optional<Response> handle(HandlerInput input) {
-        String speechText = "Welcome to Zoho from Clueless Alexa";
+        String speechText = "Welcome to Zoho from Clueless";
        return input.getResponseBuilder()
                 .withSpeech(speechText)
                 .withSimpleCard("HelloWorld", speechText)

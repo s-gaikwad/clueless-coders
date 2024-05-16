@@ -20,10 +20,10 @@ public class CheckOutIntentHandler implements RequestHandler {
   public Optional<Response> handle(HandlerInput handlerInput) {
     ZohoServiceImpl zohoService = new ZohoServiceImpl();
     String checkOutResponse = zohoService.checkOut();
-    String speechText = "Hey, you have been checked out for the day!" + checkOutResponse;
+    String speechText = "You have been checked out for the day." + checkOutResponse;
     return handlerInput.getResponseBuilder()
         .withSpeech(speechText)
-        .withSimpleCard("HelloWorld", speechText)
+        .withSimpleCard("CheckOut", speechText)
         .build();
   }
 }
