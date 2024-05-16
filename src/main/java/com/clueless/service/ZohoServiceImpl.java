@@ -166,9 +166,12 @@ public class ZohoServiceImpl {
         .build();
     MediaType mediaType = MediaType.parse("text/plain");
     RequestBody body = RequestBody.create(mediaType, "");
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    String todayDate = simpleDateFormat.format(new Date());
     Request request = new Request.Builder()
         .url(
-            "https://people.zoho.in/people/api/timetracker/addtimelog?user=shashankchhapanimohan%40gmail.com&jobName=Testing20samples123&workDate=2024-05-16&billingStatus=Billable&hours=08&description="
+            "https://people.zoho.in/people/api/timetracker/addtimelog?user=shashankchhapanimohan%40gmail.com&jobName=Testing20samples123&workDate="
+                + todayDate + "&billingStatus=Billable&hours=08&description="
                 + description)
         .method("POST", body)
         .addHeader("Authorization", "Zoho-oauthtoken " + accessToken)
