@@ -21,8 +21,10 @@ import com.clueless.handlers.CancelandStopIntentHandler;
 import com.clueless.handlers.CheckInIntentHandler;
 import com.clueless.handlers.CheckOutIntentHandler;
 import com.clueless.handlers.FallbackIntentHandler;
+import com.clueless.handlers.FutureLeaveIntentHandler;
 import com.clueless.handlers.HelpIntentHandler;
 import com.clueless.handlers.LeaveIntentHandler;
+import com.clueless.handlers.TimesheetIntentHandler;
 import com.clueless.handlers.ZohoIntentHandler;
 import com.clueless.handlers.LaunchRequestHandler;
 import com.clueless.handlers.SessionEndedRequestHandler;
@@ -30,25 +32,27 @@ import com.clueless.handlers.SessionEndedRequestHandler;
 
 public class HrmsStreamHandler extends SkillStreamHandler {
 
-    private static Skill getSkill() {
-        return Skills.standard()
-                .addRequestHandlers(
-                    new CancelandStopIntentHandler(),
-                    new LaunchRequestHandler(),
-                    new ZohoIntentHandler(),
-                    new CheckInIntentHandler(),
-                    new CheckOutIntentHandler(),
-                    new LeaveIntentHandler(),
-                    new HelpIntentHandler(),
-                    new SessionEndedRequestHandler(),
-                        new FallbackIntentHandler())
-                // Add your skill id below
-                .withSkillId("amzn1.ask.skill.53114cdc-2a62-4232-9215-93a6421d9205")
-                .build();
-    }
+  private static Skill getSkill() {
+    return Skills.standard()
+        .addRequestHandlers(
+            new CancelandStopIntentHandler(),
+            new LaunchRequestHandler(),
+            new ZohoIntentHandler(),
+            new CheckInIntentHandler(),
+            new TimesheetIntentHandler(),
+            new CheckOutIntentHandler(),
+            new LeaveIntentHandler(),
+            new FutureLeaveIntentHandler(),
+            new HelpIntentHandler(),
+            new SessionEndedRequestHandler(),
+            new FallbackIntentHandler())
+        // Add your skill id below
+        .withSkillId("amzn1.ask.skill.53114cdc-2a62-4232-9215-93a6421d9205")
+        .build();
+  }
 
-    public HrmsStreamHandler() {
-        super(getSkill());
-    }
+  public HrmsStreamHandler() {
+    super(getSkill());
+  }
 
 }

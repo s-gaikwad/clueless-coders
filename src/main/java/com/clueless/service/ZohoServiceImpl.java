@@ -3,6 +3,7 @@ package com.clueless.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 import lombok.SneakyThrows;
@@ -17,16 +18,16 @@ import okhttp3.Request;
 
 public class ZohoServiceImpl {
 
-  public static final String REFRESH_TOKEN = "1000.88f915916fb784716f5c56611048acc0.167cd075376bf86afd7a5542da325a87";
+  public static final String REFRESH_TOKEN = "1000.caa659019061d9664d5b0665aaaa7973.462e982ad1c34d7cfff5376f558fee3c";
 
-  public static final String ACCESS_TOKEN ="1000.7bb9d3dd5bcfef8553e85094bf50be96.24eecee70306139706f5e2d19afa4b4d";
+//  public static final String ACCESS_TOKEN = "1000.9f9d8f7399adcb84eab1a2c6c6f3ba66.9d74dc012c70b4574dd9be0381249a6b";
 
   ObjectMapper mapper = new ObjectMapper();
   SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
 
   @SneakyThrows
-  public String generateAccessTokenUsingRefreshToken(){
+  public String generateAccessTokenUsingRefreshToken() {
 
     OkHttpClient client = new OkHttpClient().newBuilder()
         .build();
@@ -46,32 +47,33 @@ public class ZohoServiceImpl {
   }
 
   @SneakyThrows
-  public String checkIn(){
-
+  public String checkIn() {
+    String accessToken = generateAccessTokenUsingRefreshToken();
     OkHttpClient client = new OkHttpClient().newBuilder().build();
     String checkInTime = simpleDateFormat.format(new Date());
     val formBody = new FormBody.Builder()
         .add("dateFormat", "dd/MM/yyyy HH:mm:ss")
         .add("checkIn", checkInTime)
-        .add("empId","2")
+        .add("empId", "2")
         .build();
 
     Request request = new Request.Builder()
         .url("https://people.zoho.in/people/api/attendance")
         .method("POST", formBody)
-        .addHeader("Authorization", "Zoho-oauthtoken " + ACCESS_TOKEN)
+        .addHeader("Authorization", "Zoho-oauthtoken " + accessToken)
         .build();
     Response response = client.newCall(request).execute();
     System.out.println(response);
     if (response.code() != 200) {
-      return "Unknown Error!!!!!";
+      return "Unknown Error!";
     }
     return " Checked-In At %s".formatted(checkInTime);
 
   }
 
   @SneakyThrows
-  public String checkOut(){
+  public String checkOut() {
+    String accessToken = generateAccessTokenUsingRefreshToken();
 
     OkHttpClient client = new OkHttpClient().newBuilder()
         .build();
@@ -80,55 +82,118 @@ public class ZohoServiceImpl {
     val formBody = new FormBody.Builder()
         .add("dateFormat", "dd/MM/yyyy HH:mm:ss")
         .add("checkOut", checkOutTime)
-        .add("empId","2")
+        .add("empId", "2")
         .build();
 
     Request request = new Request.Builder()
         .url("https://people.zoho.in/people/api/attendance")
         .method("POST", formBody)
-        .addHeader("Authorization", "Zoho-oauthtoken " + ACCESS_TOKEN)
+        .addHeader("Authorization", "Zoho-oauthtoken " + accessToken)
         .build();
     Response response = client.newCall(request).execute();
     System.out.println(response);
     if (response.code() != 200) {
-      return "Unknown Error!!!!!";
+      return "Unknown Error!";
     }
     return " Check-Out %s".formatted(checkOutTime);
   }
 
   @SneakyThrows
   public String applyLeaveForEmployee() {
+    String accessToken = generateAccessTokenUsingRefreshToken();
     OkHttpClient client = new OkHttpClient().newBuilder()
         .build();
     MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MMM-YYYY");
+    String todayDate = simpleDateFormat.format(new Date());
     RequestBody body = RequestBody.create(mediaType,
-        "inputData={'Employee_ID':'161069000000256392','Leavetype':'161069000000254058','From':07-May-2024,'To':07-May-2024,'days':{'07-May-2024':{'LeaveCount':0.5, 'Session':2}}}");
+        "inputData={'Employee_ID':'161069000000256392','Leavetype':'161069000000254058','From':%s,'To':%s,'days':{'%s':{'LeaveCount':1, 'Session':2}}}".formatted(
+            todayDate, todayDate, todayDate));
     Request request = new Request.Builder()
         .url("https://people.zoho.in/people/api/forms/json/leave/insertRecord?inputData=")
         .method("POST", body)
         .addHeader("Authorization",
-            "Zoho-oauthtoken " + ACCESS_TOKEN)
+            "Zoho-oauthtoken " + accessToken)
+        .addHeader("Content-Type", "application/x-www-form-urlencoded")
+        .build();
+    Response response = client.newCall(request).execute();
+    System.out.println(response);
+    if (response.code() != 200) {
+      return "Unknown Error!";
+    }
+    return " Leave Applied Successfully for: %s".formatted(todayDate);
+
+  }
+
+  @SneakyThrows
+  public String applyLeaveForEmployeeTomorrow() {
+    String accessToken = generateAccessTokenUsingRefreshToken();
+    OkHttpClient client = new OkHttpClient().newBuilder()
+        .build();
+    MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
+
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTime(new Date());
+    calendar.add(Calendar.DAY_OF_MONTH, 1);
+    String tomorrowDate = simpleDateFormat.format(calendar.getTime());
+
+    RequestBody body = RequestBody.create(mediaType,
+        "inputData={'Employee_ID':'161069000000256392','Leavetype':'161069000000254058','From':"
+            + tomorrowDate + ",'To':" + tomorrowDate + ",'days':{'" + tomorrowDate
+            + "':{'LeaveCount':1.0, 'Session':2}}}");
+    Request request = new Request.Builder()
+        .url("https://people.zoho.in/people/api/forms/json/leave/insertRecord?inputData=")
+        .method("POST", body)
+        .addHeader("Authorization",
+            "Zoho-oauthtoken " + accessToken)
         .addHeader("Content-Type", "application/x-www-form-urlencoded")
         .addHeader("Cookie",
             "1b7c7929a1=55f6120f27055335daa474ce1d568d26; CSRF_TOKEN=c00548a8-4b3b-40b6-be64-85d87b562308; _zcsr_tmp=c00548a8-4b3b-40b6-be64-85d87b562308; _zpsid=5D2791167C6C8005DE57197248157D9F")
         .build();
     Response response = client.newCall(request).execute();
+    System.out.println(response);
     if (response.code() != 200) {
-      return "Unknown Error!!!!!";
+      return "Unknown Error!";
     }
-    return " Leave Applied Successfully.";
+    return " Leave Applied Successfully for: %s".formatted(tomorrowDate);
+  }
 
+  @SneakyThrows
+  public String addTimeLog(String description) {
+    String accessToken = generateAccessTokenUsingRefreshToken();
+    OkHttpClient client = new OkHttpClient().newBuilder()
+        .build();
+    MediaType mediaType = MediaType.parse("text/plain");
+    RequestBody body = RequestBody.create(mediaType, "");
+    Request request = new Request.Builder()
+        .url(
+            "https://people.zoho.in/people/api/timetracker/addtimelog?user=shashankgaikwad3093%40gmail.com&jobName=Testing20samples123&workDate=2024-05-16&billingStatus=Billable&hours=08&description="
+                + description)
+        .method("POST", body)
+        .addHeader("Authorization", "Zoho-oauthtoken " + accessToken)
+        .addHeader("Cookie",
+            "1b7c7929a1=03bb32d0a3548e55cf840f4698772ae8; 1b7c7929a1=03bb32d0a3548e55cf840f4698772ae8")
+        .build();
+    Response response = client.newCall(request).execute();
+    System.out.println(response);
+    if (response.code() != 200) {
+      return "Unknown Error!";
+    }
+    return " Time log added Successfully %s".formatted(description);
   }
 
 //  public static void main(String[] args) {
+//
 //    ZohoServiceImpl zohoService = new ZohoServiceImpl();
 //    String accessToken = zohoService.generateAccessTokenUsingRefreshToken();
 //    System.out.println(accessToken);
 
-
 //    zohoService.checkIn();
 //    zohoService.checkOut();
-////    zohoService.applyLeaveForEmployee();
+//    zohoService.applyLeaveForEmployee();
+//    zohoService.applyLeaveForEmployeeTomorrow();
+//    zohoService.addTimeLog("PLAT-3000");
 //
 //  }
 }
